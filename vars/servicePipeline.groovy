@@ -19,7 +19,8 @@ def call(Map config) {
             stage('Test') {
                 steps {
                     echo "Testing ${config.serviceName}..."
-                    sh 'pip3 install --break-system-packages pytest pytest-mock && pytest tests/'
+                    sh 'pip3 install --break-system-packages pytest pytest-mock'
+                    sh 'pytest tests/'
                 }
             }
 
