@@ -42,19 +42,49 @@ def call(Map config) {
             }
 
             stage('Container Push') {
+                when {
+                    anyOf {
+                        branch 'develop'
+                        branch 'release/*'
+                        branch 'main'
+                    }
+                }
                 steps {
                     echo "Pushing to Docker Hub..."
                     sh """
-                        echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                        echo $DOCKERHUB_CREDENTIALS_PSW | docker login \
+                        -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                         docker push ${IMAGE_NAME}:${IMAGE_TAG}
                         docker push ${IMAGE_NAME}:latest
                     """
                 }
             }
 
-            stage('Deploy') {
+            stage('Deploy Dev') {
+                when { branch 'develop' }
                 steps {
-                    echo "Deploying ${config.serviceName} to ${env.BRANCH_NAME}..."
+                    echo "Deploying ${config.serviceName} to Dev..."
+                    // kubectl apply will go here in Kubernetes phase
+                }
+            }
+
+            stage('Deploy Staging') {
+                when { branch 'release/*' }
+                steps {
+                    echo "Deploying ${config.serviceName} to Staging..."
+                    // kubectl apply will go here in Kubernetes phase
+                }
+            }
+
+            stage('Deploy Prod') {
+                when { branch 'main' }
+                input {
+                    message "Deploy to Production?"
+                    ok "Approve"
+                }
+                steps {
+                    echo "Deploying ${config.serviceName} to Production..."
+                    // kubectl apply will go here in Kubernetes phase
                 }
             }
         }
