@@ -20,7 +20,7 @@ def call(Map config) {
                 steps {
                     echo "Testing ${config.serviceName}..."
                     sh 'pip3 install --break-system-packages pytest pytest-mock'
-                    sh 'pytest tests/'
+                    sh 'python3 -m pytest tests/'
                 }
             }
 
