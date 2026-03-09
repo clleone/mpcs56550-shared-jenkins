@@ -12,14 +12,14 @@ def call(Map config) {
             stage('Build') {
                 steps {
                     echo "Building ${config.serviceName}..."
-                    sh 'pip3 install -r requirements.txt'
+                    sh 'pip3 install --break-system-packages -r requirements.txt'
                 }
             }
 
             stage('Test') {
                 steps {
                     echo "Testing ${config.serviceName}..."
-                    sh 'pip3 install pytest pytest-mock && pytest tests/'
+                    sh 'pip3 install --break-system-packages pytest pytest-mock && pytest tests/'
                 }
             }
 
