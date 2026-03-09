@@ -25,7 +25,7 @@ def call(Map config) {
                         docker run --rm \
                         -v \${WORKSPACE}/init.sql:/init.sql \
                         postgres:15 \
-                        psql -f /init.sql --no-password 2>&1 || true
+                        psql -f /init.sql -c "SELECT COUNT(*) FROM products;" --no-password 2>&1 || true
                     """
                 }
             }
