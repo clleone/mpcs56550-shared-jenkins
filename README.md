@@ -1,0 +1,1 @@
+This repo facilitates Jenkins shared libraries for reusable pipeline code.
