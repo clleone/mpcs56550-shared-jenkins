@@ -29,6 +29,49 @@ def call(Map config) {
                     """
                 }
             }
+
+            stage('Deploy Dev') {
+                when { branch 'develop' }
+                steps {
+                    echo "Deploying database to Dev..."
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                        sh """
+                            kubectl apply -f k8s/database/dev/ \
+                            --kubeconfig=$KUBECONFIG
+                        """
+                    }
+                }
+            }
+
+            stage('Deploy Staging') {
+                when { branch 'release/*' }
+                steps {
+                    echo "Deploying database to Staging..."
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                        sh """
+                            kubectl apply -f k8s/database/staging/ \
+                            --kubeconfig=$KUBECONFIG
+                        """
+                    }
+                }
+            }
+
+            stage('Deploy Prod') {
+                when { branch 'main' }
+                input {
+                    message "Deploy database to Production?"
+                    ok "Approve"
+                }
+                steps {
+                    echo "Deploying database to Prod..."
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                        sh """
+                            kubectl apply -f k8s/database/prod/ \
+                            --kubeconfig=$KUBECONFIG
+                        """
+                    }
+                }
+            }
         }
 
         post {

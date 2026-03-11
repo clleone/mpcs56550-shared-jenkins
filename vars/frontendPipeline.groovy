@@ -65,6 +65,12 @@ def call(Map config) {
                 when { branch 'develop' }
                 steps {
                     echo "Deploying ${config.serviceName} to Dev..."
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                        sh """
+                            kubectl apply -f k8s/${config.serviceName}/dev/ \
+                            --kubeconfig=$KUBECONFIG
+                        """
+                    }
                 }
             }
 
@@ -72,6 +78,12 @@ def call(Map config) {
                 when { branch 'release/*' }
                 steps {
                     echo "Deploying ${config.serviceName} to Staging..."
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                        sh """
+                            kubectl apply -f k8s/${config.serviceName}/staging/ \
+                            --kubeconfig=$KUBECONFIG
+                        """
+                    }
                 }
             }
 
@@ -82,7 +94,13 @@ def call(Map config) {
                     ok "Approve"
                 }
                 steps {
-                    echo "Deploying ${config.serviceName} to Production..."
+                    echo "Deploying ${config.serviceName} to Prod..."
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                        sh """
+                            kubectl apply -f k8s/${config.serviceName}/prod/ \
+                            --kubeconfig=$KUBECONFIG
+                        """
+                    }
                 }
             }
         }
