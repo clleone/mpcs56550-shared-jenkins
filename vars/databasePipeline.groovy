@@ -37,7 +37,7 @@ def call(Map config) {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         sh '''
                             kubectl apply -f k8s/database/dev/ \
-                            --kubeconfig=$KUBECONFIG --validate=false
+                            --kubeconfig=$KUBECONFIG -insecure-skip-tls-verify=true
                         '''
                     }
                 }
@@ -50,7 +50,7 @@ def call(Map config) {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         sh """
                             kubectl apply -f k8s/database/staging/ \
-                            --kubeconfig=$KUBECONFIG
+                            --kubeconfig=$KUBECONFIG -insecure-skip-tls-verify=true
                         """
                     }
                 }
@@ -67,7 +67,7 @@ def call(Map config) {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         sh """
                             kubectl apply -f k8s/database/prod/ \
-                            --kubeconfig=$KUBECONFIG
+                            --kubeconfig=$KUBECONFIG -insecure-skip-tls-verify=true
                         """
                     }
                 }
