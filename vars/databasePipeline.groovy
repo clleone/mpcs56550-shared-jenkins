@@ -35,10 +35,10 @@ def call(Map config) {
                 steps {
                     echo "Deploying database to Dev..."
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        sh """
+                        sh '''
                             kubectl apply -f k8s/database/dev/ \
                             --kubeconfig=$KUBECONFIG
-                        """
+                        '''
                     }
                 }
             }

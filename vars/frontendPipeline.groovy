@@ -96,10 +96,10 @@ def call(Map config) {
                 steps {
                     echo "Deploying ${config.serviceName} to Prod..."
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        sh """
+                        sh '''
                             kubectl apply -f k8s/${config.serviceName}/prod/ \
                             --kubeconfig=$KUBECONFIG
-                        """
+                        '''
                     }
                 }
             }
