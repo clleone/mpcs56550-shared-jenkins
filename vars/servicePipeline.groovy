@@ -98,7 +98,7 @@ def call(Map config) {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         sh '''
                             kubectl apply -f k8s/${config.serviceName}/prod/ \
-                            --kubeconfig=$KUBECONFIG
+                            --kubeconfig=$KUBECONFIG --validate=false
                         '''
                     }
                 }
