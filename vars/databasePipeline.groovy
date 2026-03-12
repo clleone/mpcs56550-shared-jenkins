@@ -11,6 +11,7 @@ def call(Map config) {
                 steps {
                     echo "Scanning postgres image..."
                     sh """
+                        #!/bin/bash
                         docker run --rm \
                         -v /var/run/docker.sock:/var/run/docker.sock \
                         aquasec/trivy image postgres:15 || true
@@ -22,6 +23,7 @@ def call(Map config) {
                 steps {
                     echo "Validating SQL init script..."
                     sh """
+                        #!/bin/bash
                         docker run --rm \
                         -v \${WORKSPACE}/init.sql:/init.sql \
                         postgres:15 \
@@ -36,6 +38,7 @@ def call(Map config) {
                     echo "Deploying database to Dev..."
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         sh '''
+                            #!/bin/bash
                             kubectl apply -f k8s/database/dev/ \
                             --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true
                         '''
