@@ -80,11 +80,13 @@ def call(Map config) {
                 steps {
                     echo "Deploying ${config.serviceName} to Staging..."
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        sh """
-                            #!/bin/bash
-                            kubectl apply -f k8s/${config.serviceName}/staging/ \
-                            --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true
-                        """
+                        withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
+                            sh """
+                                #!/bin/bash
+                                kubectl apply -f k8s/${config.serviceName}/staging/ \
+                                --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true
+                            """
+                        }
                     }
                 }
             }
@@ -98,11 +100,13 @@ def call(Map config) {
                 steps {
                     echo "Deploying ${config.serviceName} to Prod..."
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        sh '''
-                            #!/bin/bash
-                            kubectl apply -f k8s/${config.serviceName}/prod/ \
-                            --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true
-                        '''
+                        withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
+                            sh '''
+                                #!/bin/bash
+                                kubectl apply -f k8s/${config.serviceName}/prod/ \
+                                --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true
+                            '''
+                        }
                     }
                 }
             }
