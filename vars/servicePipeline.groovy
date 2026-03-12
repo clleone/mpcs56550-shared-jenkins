@@ -67,11 +67,7 @@ def call(Map config) {
                     echo "Deploying ${config.serviceName} to Dev..."
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
-                            sh """
-                                #!/bin/bash
-                                kubectl apply -f k8s/${config.serviceName}/dev/ \
-                                --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true
-                            """
+                            sh 'kubectl apply -f k8s/${config.serviceName}/dev/ --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true'
                         }
                     }
                 }
@@ -83,11 +79,7 @@ def call(Map config) {
                     echo "Deploying ${config.serviceName} to Staging..."
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
-                            sh """
-                                #!/bin/bash
-                                kubectl apply -f k8s/${config.serviceName}/staging/ \
-                                --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true
-                            """
+                            sh 'kubectl apply -f k8s/${config.serviceName}/staging/ --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true'
                         }
                     }
                 }
@@ -103,10 +95,7 @@ def call(Map config) {
                     echo "Deploying ${config.serviceName} to Prod..."
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
-                            sh '''
-                                kubectl apply -f k8s/${config.serviceName}/prod/ \
-                                --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true
-                            '''
+                            sh 'kubectl apply -f k8s/${config.serviceName}/prod/ --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true'
                         }
                     }
                 }

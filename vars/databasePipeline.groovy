@@ -36,11 +36,7 @@ def call(Map config) {
                     echo "Deploying database to Dev..."
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
-                            sh '''
-                                #!/bin/bash
-                                kubectl apply -f k8s/database/dev/ \
-                                --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true
-                            '''
+                            sh 'kubectl apply -f k8s/database/dev/ --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true'
                         }
                     }
                 }
@@ -52,11 +48,7 @@ def call(Map config) {
                     echo "Deploying database to Staging..."
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
-                            sh """
-                                #!/bin/bash
-                                kubectl apply -f k8s/database/staging/ \
-                                --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true
-                            """
+                            sh 'kubectl apply -f k8s/database/staging/ --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true'
                         }
                     }
                 }
@@ -72,11 +64,7 @@ def call(Map config) {
                     echo "Deploying database to Prod..."
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
-                            sh """
-                                #!/bin/bash
-                                kubectl apply -f k8s/database/prod/ \
-                                --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true
-                            """
+                            sh 'kubectl apply -f k8s/database/prod/ --kubeconfig=$KUBECONFIG --insecure-skip-tls-verify=true'
                         }
                     }
                 }
